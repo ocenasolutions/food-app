@@ -6,9 +6,10 @@ import { formatMoney } from "@/lib/utils";
 
 export function RestaurantCard({ restaurant, locale }: { restaurant: Restaurant; locale: Locale }) {
   const isAr = locale === "ar";
+  const restaurantId = restaurant.id ?? restaurant._id;
   return (
     <Link
-      href={`/${locale}/restaurants/${restaurant.id ?? restaurant._id}`}
+      href={`/${locale}/restaurants/${restaurantId}`}
       className="group overflow-hidden rounded-lg border border-border bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
     >
       <div className="relative aspect-[16/9] overflow-hidden">

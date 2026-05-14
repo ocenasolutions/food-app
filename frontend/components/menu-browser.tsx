@@ -31,6 +31,10 @@ export function MenuBrowser({
     return item.id ?? item._id ?? item.name;
   }
 
+  function entityId(item: { id?: string; _id?: string }) {
+    return item.id ?? item._id ?? "";
+  }
+
   function itemQuantity(item: MenuItem) {
     const key = itemKey(item);
     return cart.find((line) => itemKey(line) === key)?.quantity ?? 0;
@@ -67,10 +71,10 @@ export function MenuBrowser({
           />
         </div>
         {categories.map((category) => {
-          const categoryItems = filtered.filter((item) => item.categoryId === category.id);
+          const categoryItems = filtered.filter((item) => String(item.categoryId) === entityId(category));
           if (!categoryItems.length) return null;
           return (
-            <section key={category.id} className="space-y-3">
+            <section key={entityId(category)} className="space-y-3">
               <h2 className="text-xl font-bold">{isAr ? category.nameAr ?? category.name : category.name}</h2>
               <div className="grid gap-3">
                 {categoryItems.map((item) => {
@@ -106,7 +110,7 @@ export function MenuBrowser({
           );
         })}
       </main>
-      <CartPanel lines={cart} onAdd={add} onRemove={remove} restaurantId={restaurant.id ?? restaurant._id ?? "rst_levant"} />
+      <CartPanel lines={cart} onAdd={add} onRemove={remove} restaurantId={entityId(restaurant)} />
     </div>
   );
 }

@@ -1,10 +1,15 @@
 import { CheckCircle2, ClipboardList, Pencil, Utensils } from "lucide-react";
-import { getOrders, getRestaurant } from "@/lib/api";
+import { getOrders, getRestaurant, getRestaurants } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { formatMoney } from "@/lib/utils";
 
 export default async function RestaurantDashboardPage() {
-  const [{ data }, { data: orders }] = await Promise.all([getRestaurant("rst_levant"), getOrders()]);
+  const [{ data: restaurants }, { data: orders }] = await Promise.all([getRestaurants(), getOrders()]);
+  const restaurant = restaurants[0];
+  const restaurantId = restaurant?.id ?? restaurant?._id;
+  const { data } = restaurantId
+    ? await getRestaurant(restaurantId)
+    : { data: { restaurant: null, categories: [], items: [] } };
 
   return (
     <main className="page-shell py-8">
@@ -20,9 +25,10 @@ export default async function RestaurantDashboardPage() {
           <h2 className="text-xl font-bold">Menu Management</h2>
           <Button><Pencil size={16} /> Add item</Button>
         </div>
+        {!restaurantId ? <p className="rounded-md bg-muted p-3 text-sm">No restaurants found in the backend.</p> : null}
         <div className="grid gap-3">
           {data.items.map((item) => (
-            <div key={item.id} className="grid gap-2 rounded-md border border-border p-3 md:grid-cols-[1fr_auto_auto]">
+            <div key={item.id ?? item._id} className="grid gap-2 rounded-md border border-border p-3 md:grid-cols-[1fr_auto_auto]">
               <span className="font-semibold">{item.name}</span>
               <span>{formatMoney(item.price)}</span>
               <span className={item.isAvailable ? "font-semibold text-accent" : "font-semibold text-primary"}>

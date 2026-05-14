@@ -4,6 +4,7 @@ import { CreditCard, Minus, Plus, ReceiptText, Truck } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { placeOrder } from "@/lib/api";
+import { readSession } from "@/lib/auth-client";
 import type { MenuItem } from "@/lib/types";
 import { formatMoney } from "@/lib/utils";
 
@@ -18,6 +19,7 @@ export function CartPanel({ lines, onAdd, onRemove, restaurantId }: {
   const [fulfillmentType, setFulfillmentType] = useState<"delivery" | "pickup">("delivery");
   const [paymentMethod, setPaymentMethod] = useState<"card" | "cash">("card");
   const [status, setStatus] = useState("");
+  const [error, setError] = useState("");
   const subtotal = useMemo(() => lines.reduce((sum, item) => sum + item.price * item.quantity, 0), [lines]);
   const deliveryFee = fulfillmentType === "delivery" ? 5 : 0;
   const tax = subtotal * 0.05;
@@ -28,19 +30,32 @@ export function CartPanel({ lines, onAdd, onRemove, restaurantId }: {
   }
 
   async function checkout() {
-    const result = await placeOrder({
-      customerId: "usr_customer_1",
-      restaurantId,
-      fulfillmentType,
-      paymentMethod,
-      items: lines.map((line) => ({
-        menuItemId: line.id ?? line._id ?? line.name,
-        name: line.name,
-        quantity: line.quantity,
-        unitPrice: line.price
-      }))
-    });
-    setStatus(`Order ${result.data.id} placed via ${result.source}.`);
+    setStatus("");
+    setError("");
+    const user = readSession();
+    const customerId = user?.id ?? user?._id;
+    if (!customerId) {
+      setError("Please log in before placing an order.");
+      return;
+    }
+
+    try {
+      const result = await placeOrder({
+        customerId,
+        restaurantId,
+        fulfillmentType,
+        paymentMethod,
+        items: lines.map((line) => ({
+          menuItemId: line.id ?? line._id ?? line.name,
+          name: line.name,
+          quantity: line.quantity,
+          unitPrice: line.price
+        }))
+      });
+      setStatus(`Order ${result.data.id ?? result.data._id} placed.`);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Order failed.");
+    }
   }
 
   return (
@@ -104,6 +119,7 @@ export function CartPanel({ lines, onAdd, onRemove, restaurantId }: {
         Place order
       </Button>
       {status ? <p className="mt-3 rounded-md bg-muted p-3 text-sm">{status}</p> : null}
+      {error ? <p className="mt-3 rounded-md bg-primary/10 p-3 text-sm font-semibold text-primary">{error}</p> : null}
     </aside>
   );
 }

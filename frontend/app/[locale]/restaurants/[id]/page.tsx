@@ -11,7 +11,7 @@ export default async function RestaurantPage({
 }) {
   const { locale: rawLocale, id } = await params;
   const locale: Locale = rawLocale === "ar" ? "ar" : "en";
-  const { data, source } = await getRestaurant(id);
+  const { data } = await getRestaurant(id);
   const isAr = locale === "ar";
 
   return (
@@ -20,7 +20,7 @@ export default async function RestaurantPage({
         <Image src={data.restaurant.coverImage} alt={data.restaurant.name} fill className="object-cover opacity-70" priority />
         <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent">
           <div className="page-shell pb-8 pt-24">
-            <p className="mb-2 text-sm font-semibold">{source === "mock" ? "Mock fallback active" : "Live menu"}</p>
+            <p className="mb-2 text-sm font-semibold">Live menu</p>
             <h1 className="text-4xl font-black md:text-6xl">{isAr ? data.restaurant.nameAr ?? data.restaurant.name : data.restaurant.name}</h1>
             <p className="mt-3 max-w-2xl text-lg text-white/90">
               {isAr ? data.restaurant.descriptionAr ?? data.restaurant.description : data.restaurant.description}

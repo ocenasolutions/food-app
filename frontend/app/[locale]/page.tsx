@@ -8,14 +8,14 @@ import type { Locale } from "@/lib/types";
 export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale: rawLocale } = await params;
   const locale: Locale = rawLocale === "ar" ? "ar" : "en";
-  const { data: restaurants, source } = await getRestaurants();
+  const { data: restaurants } = await getRestaurants();
 
   return (
     <main>
       <section className="border-b border-border bg-white">
         <div className="page-shell grid gap-6 py-8 lg:grid-cols-[1.2fr_0.8fr] lg:items-center">
           <div>
-            <p className="text-sm font-bold uppercase tracking-wide text-primary">{source === "mock" ? "Mock fallback active" : "Live API"}</p>
+            <p className="text-sm font-bold uppercase tracking-wide text-primary">Live API</p>
             <h1 className="mt-2 max-w-3xl text-4xl font-black leading-tight md:text-5xl">
               {locale === "ar" ? "اطلب طعامك المفضل بسرعة ووضوح" : "Order premium food with live operations built in"}
             </h1>

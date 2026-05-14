@@ -1,18 +1,18 @@
 export type Locale = "en" | "ar";
 export type UserRole = "customer" | "restaurant_staff" | "delivery_staff" | "admin";
 
-export interface MockUser {
-  id: string;
+export interface User {
+  id?: string;
+  _id?: string;
   name: string;
   email: string;
-  password?: string;
-  phone: string;
+  phone?: string;
   role: UserRole;
   restaurantId?: string;
 }
 
 export interface Restaurant {
-  id: string;
+  id?: string;
   _id?: string;
   name: string;
   nameAr?: string;
@@ -34,7 +34,7 @@ export interface Restaurant {
 }
 
 export interface MenuCategory {
-  id: string;
+  id?: string;
   _id?: string;
   restaurantId: string;
   name: string;
@@ -43,7 +43,7 @@ export interface MenuCategory {
 }
 
 export interface MenuItem {
-  id: string;
+  id?: string;
   _id?: string;
   restaurantId: string;
   categoryId: string;
@@ -59,7 +59,8 @@ export interface MenuItem {
 }
 
 export interface Order {
-  id: string;
+  id?: string;
+  _id?: string;
   status: string;
   fulfillmentType: "delivery" | "pickup";
   paymentStatus: string;

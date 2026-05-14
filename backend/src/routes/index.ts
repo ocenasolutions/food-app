@@ -4,6 +4,8 @@ import { adminDashboard, restaurantDashboard } from "../controllers/dashboardCon
 import { createOrder, listOrders, updateOrderStatus } from "../controllers/orderController.js";
 import { getRestaurant, listRestaurants } from "../controllers/publicController.js";
 import { uploadStatus } from "../controllers/uploadController.js";
+import { isDatabaseConnected } from "../config/db.js";
+import { DeliveryPartner } from "../models/Support.js";
 import { createPaymentIntent } from "../services/paymentService.js";
 
 export const router = Router();
@@ -20,6 +22,14 @@ router.get("/dashboards/admin", adminDashboard);
 router.get("/dashboards/restaurant", restaurantDashboard);
 router.get("/uploads/status", uploadStatus);
 router.get("/delivery/assigned", async (_req, res) => {
+  if (isDatabaseConnected()) {
+    const partner = await DeliveryPartner.findOne({ status: { $in: ["on_delivery", "available"] } })
+      .populate("userId", "name email phone role")
+      .populate("assignedOrderIds")
+      .lean();
+    return res.json({ data: partner, source: "database" });
+  }
+
   const { readMockData } = await import("../services/mockStore.js");
   const data = await readMockData<any>();
   res.json({ data: data.deliveryPartners[0], source: "mock" });

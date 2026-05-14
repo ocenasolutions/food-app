@@ -1,11 +1,10 @@
 "use client";
 
-import { mockData } from "./mock";
-import type { Locale, MockUser, UserRole } from "./types";
+import type { Locale, User, UserRole } from "./types";
 
-export type AuthUser = Omit<MockUser, "password"> & {
+export type AuthUser = User & {
   token?: string;
-  source?: "database" | "mock" | "local-mock";
+  source?: "database" | "mock";
 };
 
 export const SESSION_KEY = "foodflow.session";
@@ -16,14 +15,6 @@ export const roleHome: Record<UserRole, (locale: Locale) => string> = {
   delivery_staff: (locale) => `/${locale}/delivery`,
   admin: (locale) => `/${locale}/admin`
 };
-
-export const demoAccounts = mockData.users.map((user) => ({
-  id: user.id,
-  name: user.name,
-  email: user.email,
-  password: user.password ?? "password123",
-  role: user.role
-}));
 
 export function readSession(): AuthUser | null {
   if (typeof window === "undefined") return null;
@@ -37,30 +28,14 @@ export function readSession(): AuthUser | null {
   }
 }
 
-export function writeSession(user: AuthUser | MockUser) {
-  const safeUser = { ...user } as AuthUser & { password?: string };
-  delete safeUser.password;
+export function writeSession(user: AuthUser) {
+  const safeUser = { ...user };
   window.localStorage.setItem(SESSION_KEY, JSON.stringify(safeUser));
   return safeUser;
 }
 
 export function clearSession() {
   window.localStorage.removeItem(SESSION_KEY);
-}
-
-export function loginWithMock(email: string, password: string, role?: UserRole) {
-  const user = mockData.users.find(
-    (item) =>
-      item.email.toLowerCase() === email.toLowerCase() &&
-      (item.password ?? "password123") === password &&
-      (!role || item.role === role)
-  );
-  if (!user) return null;
-  return writeSession({
-    ...user,
-    token: `local-mock-token-${user.id}`,
-    source: "local-mock"
-  });
 }
 
 export function isAllowedPath(role: UserRole, pathname: string) {

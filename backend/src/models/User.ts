@@ -24,6 +24,7 @@ const UserSchema = new Schema(
       enum: ["customer", "restaurant_staff", "delivery_staff", "admin"],
       default: "customer"
     },
+    restaurantId: { type: Schema.Types.ObjectId, ref: "Restaurant" },
     addresses: [AddressSchema],
     isActive: { type: Boolean, default: true }
   },

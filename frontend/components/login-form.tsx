@@ -1,10 +1,10 @@
 "use client";
 
 import { Bike, ShieldCheck, Store, UserRound } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { demoAccounts, loginWithMock, roleHome, writeSession } from "@/lib/auth-client";
+import { roleHome, writeSession } from "@/lib/auth-client";
 import { getApiHealth, loginWithApi } from "@/lib/api";
 import type { Locale, UserRole } from "@/lib/types";
 import { useAuth } from "./auth-provider";
@@ -20,11 +20,9 @@ export function LoginForm({ locale }: { locale: Locale }) {
   const router = useRouter();
   const { setUser } = useAuth();
   const [role, setRole] = useState<UserRole>("customer");
-  const account = useMemo(() => demoAccounts.find((item) => item.role === role) ?? demoAccounts[0], [role]);
-  const [email, setEmail] = useState(account.email);
-  const [password, setPassword] = useState(account.password);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [source, setSource] = useState("");
   const [loading, setLoading] = useState(false);
   const [apiOnline, setApiOnline] = useState<boolean | null>(null);
 
@@ -33,19 +31,14 @@ export function LoginForm({ locale }: { locale: Locale }) {
   }, []);
 
   function selectRole(nextRole: UserRole) {
-    const nextAccount = demoAccounts.find((item) => item.role === nextRole) ?? demoAccounts[0];
     setRole(nextRole);
-    setEmail(nextAccount.email);
-    setPassword(nextAccount.password);
     setError("");
-    setSource("");
   }
 
   async function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setLoading(true);
     setError("");
-    setSource("");
 
     try {
       const result = await loginWithApi({ email, password });
@@ -63,15 +56,8 @@ export function LoginForm({ locale }: { locale: Locale }) {
       writeSession(sessionUser);
       setUser(sessionUser);
       router.replace(roleHome[user.role](locale));
-    } catch {
-      const user = loginWithMock(email, password, role);
-      if (!user) {
-        setError("Invalid credentials. API login failed and mock fallback did not match.");
-        return;
-      }
-      setSource("Backend unavailable. Signed in with local mock fallback.");
-      setUser(user);
-      router.replace(roleHome[user.role](locale));
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Backend login failed.");
     } finally {
       setLoading(false);
     }
@@ -86,19 +72,21 @@ export function LoginForm({ locale }: { locale: Locale }) {
             Sign in to the right workspace
           </h1>
           <p className="mt-4 max-w-xl text-lg text-muted-foreground">
-            Each mocked account opens a different flow: customer ordering, admin operations, restaurant staff tools, or delivery staff work.
+            Sign in with a backend account to open the customer, admin, restaurant staff, or delivery staff workspace.
           </p>
           <div className="mt-6 grid gap-3 sm:grid-cols-2">
-            {demoAccounts.map((demo) => (
+            {roles.map(({ role: itemRole, label, icon: Icon }) => (
               <button
-                key={demo.id}
+                key={itemRole}
                 type="button"
-                onClick={() => selectRole(demo.role)}
-                className="rounded-lg border border-border bg-background p-4 text-left text-sm hover:border-primary"
+                onClick={() => selectRole(itemRole)}
+                className={`rounded-lg border p-4 text-left text-sm hover:border-primary ${
+                  role === itemRole ? "border-primary bg-white shadow-sm" : "border-border bg-background"
+                }`}
               >
-                <p className="font-bold">{demo.name}</p>
-                <p className="text-muted-foreground">{demo.email}</p>
-                <p className="mt-2 font-semibold text-primary">{demo.role.replace("_", " ")}</p>
+                <Icon size={18} className={role === itemRole ? "text-primary" : "text-muted-foreground"} />
+                <p className="mt-3 font-bold">{label}</p>
+                <p className="mt-1 text-muted-foreground">{itemRole.replace("_", " ")}</p>
               </button>
             ))}
           </div>
@@ -108,7 +96,7 @@ export function LoginForm({ locale }: { locale: Locale }) {
           <p className="mt-2 text-sm font-semibold text-muted-foreground">
             API status:{" "}
             <span className={apiOnline ? "text-accent" : "text-primary"}>
-              {apiOnline === null ? "checking" : apiOnline ? "connected" : "mock fallback"}
+              {apiOnline === null ? "checking" : apiOnline ? "connected" : "offline"}
             </span>
           </p>
           <div className="mt-5 grid gap-3 sm:grid-cols-2">
@@ -142,11 +130,10 @@ export function LoginForm({ locale }: { locale: Locale }) {
             className="mt-2 h-11 w-full rounded-md border border-border bg-white px-3 outline-none focus:ring-2 focus:ring-primary"
           />
           {error ? <p className="mt-3 rounded-md bg-primary/10 p-3 text-sm font-semibold text-primary">{error}</p> : null}
-          {source ? <p className="mt-3 rounded-md bg-muted p-3 text-sm font-semibold">{source}</p> : null}
           <Button className="mt-5 w-full" type="submit" disabled={loading}>
             {loading ? "Checking API..." : "Enter workspace"}
           </Button>
-          <p className="mt-3 text-sm text-muted-foreground">The form calls the backend first. Mock data remains as fallback.</p>
+          <p className="mt-3 text-sm text-muted-foreground">The form signs in through the backend API.</p>
         </form>
       </main>
     </div>
