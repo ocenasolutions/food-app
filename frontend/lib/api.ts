@@ -1,7 +1,8 @@
 import { getMockRestaurant, mockData } from "./mock";
 import type { MenuCategory, MenuItem, Order, Restaurant, UserRole } from "./types";
 
-const API_URL = "http://localhost:4000/api";
+//const API_URL = "http://localhost:4000/api";
+const API_URL= "https://food-app-ituc.onrender.com";
 
 type ApiResult<T> = { data: T; source: "database" | "mock" };
 
