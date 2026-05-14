@@ -2,6 +2,8 @@ import { CheckCircle2 } from "lucide-react";
 import { getOrders } from "@/lib/api";
 import { formatMoney } from "@/lib/utils";
 
+export const dynamic = "force-dynamic";
+
 const flow = ["placed", "accepted", "preparing", "ready_for_pickup", "partner_assigned", "out_for_delivery", "delivered"];
 
 export default async function OrdersPage() {

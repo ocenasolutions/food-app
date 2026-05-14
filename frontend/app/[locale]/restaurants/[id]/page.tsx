@@ -4,6 +4,8 @@ import { MenuBrowser } from "@/components/menu-browser";
 import { getRestaurant } from "@/lib/api";
 import type { Locale } from "@/lib/types";
 
+export const dynamic = "force-dynamic";
+
 export default async function RestaurantPage({
   params
 }: {

@@ -2,6 +2,8 @@ import { Banknote, Bike, Store, UsersRound } from "lucide-react";
 import { getAdminStats, getOrders, getRestaurants } from "@/lib/api";
 import { formatMoney } from "@/lib/utils";
 
+export const dynamic = "force-dynamic";
+
 export default async function AdminPage() {
   const [{ data: stats }, { data: orders }, { data: restaurants }] = await Promise.all([
     getAdminStats(),

@@ -3,6 +3,8 @@ import { getOrders, getRestaurant, getRestaurants } from "@/lib/api";
 import { Button } from "@/components/ui/button";
 import { formatMoney } from "@/lib/utils";
 
+export const dynamic = "force-dynamic";
+
 export default async function RestaurantDashboardPage() {
   const [{ data: restaurants }, { data: orders }] = await Promise.all([getRestaurants(), getOrders()]);
   const restaurant = restaurants[0];

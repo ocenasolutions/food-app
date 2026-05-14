@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import { getRestaurants } from "@/lib/api";
 import type { Locale } from "@/lib/types";
 
+export const dynamic = "force-dynamic";
+
 export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale: rawLocale } = await params;
   const locale: Locale = rawLocale === "ar" ? "ar" : "en";
