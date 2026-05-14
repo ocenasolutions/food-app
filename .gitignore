@@ -1,0 +1,27 @@
+# Upload only the frontend and backend folders from this repo root.
+*
+!/.gitignore
+!/frontend/
+!/frontend/**
+!/backend/
+!/backend/**
+
+# Still exclude generated and secret files inside uploaded folders.
+frontend/node_modules
+frontend/.next
+frontend/.netlify
+frontend/.vercel
+frontend/.env
+frontend/.env.*
+frontend/npm-debug.log*
+frontend/*.tsbuildinfo
+
+backend/node_modules
+backend/dist
+backend/.env
+backend/.env.*
+!backend/.env.example
+backend/npm-debug.log*
+backend/*.tsbuildinfo
+
+.DS_Store

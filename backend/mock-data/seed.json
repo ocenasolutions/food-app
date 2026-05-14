@@ -1,0 +1,218 @@
+{
+  "users": [
+    {
+      "id": "usr_customer_1",
+      "name": "Aisha Khan",
+      "email": "aisha@example.com",
+      "password": "password123",
+      "phone": "+971501234567",
+      "role": "customer",
+      "addresses": [
+        {
+          "id": "addr_1",
+          "label": "Home",
+          "line1": "Marina Promenade",
+          "city": "Dubai",
+          "country": "UAE",
+          "lat": 25.0804,
+          "lng": 55.1403
+        }
+      ]
+    },
+    {
+      "id": "usr_owner_1",
+      "name": "Omar Haddad",
+      "email": "staff@levanttable.com",
+      "password": "password123",
+      "phone": "+971551112222",
+      "role": "restaurant_staff",
+      "restaurantId": "rst_levant"
+    },
+    {
+      "id": "usr_delivery_1",
+      "name": "Ravi Menon",
+      "email": "delivery@foodflow.local",
+      "password": "password123",
+      "phone": "+971555554444",
+      "role": "delivery_staff"
+    },
+    {
+      "id": "usr_admin_1",
+      "name": "Platform Admin",
+      "email": "admin@foodflow.local",
+      "password": "password123",
+      "phone": "+971500000000",
+      "role": "admin"
+    }
+  ],
+  "restaurants": [
+    {
+      "id": "rst_levant",
+      "ownerId": "usr_owner_1",
+      "name": "Levant Table",
+      "nameAr": "مائدة الشام",
+      "description": "Premium Levantine grills, mezze, and fresh-baked breads.",
+      "descriptionAr": "مشاوي ومقبلات شامية فاخرة مع خبز طازج.",
+      "coverImage": "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1400&q=80",
+      "logo": "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=300&q=80",
+      "cuisines": ["Levantine", "Grill", "Healthy"],
+      "rating": 4.8,
+      "reviewCount": 1240,
+      "deliveryTime": "25-35 min",
+      "priceLevel": 3,
+      "deliveryFee": 4.5,
+      "minOrder": 25,
+      "isOpen": true,
+      "supportsDelivery": true,
+      "supportsPickup": true,
+      "address": "Jumeirah Beach Road, Dubai"
+    },
+    {
+      "id": "rst_roma",
+      "ownerId": "usr_owner_1",
+      "name": "Roma Pantry",
+      "nameAr": "روما بانتري",
+      "description": "Wood-fired pizza, handmade pasta, and Italian desserts.",
+      "descriptionAr": "بيتزا على الحطب ومعكرونة طازجة وحلويات إيطالية.",
+      "coverImage": "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=1400&q=80",
+      "logo": "https://images.unsplash.com/photo-1579751626657-72bc17010498?auto=format&fit=crop&w=300&q=80",
+      "cuisines": ["Italian", "Pizza", "Pasta"],
+      "rating": 4.6,
+      "reviewCount": 890,
+      "deliveryTime": "30-40 min",
+      "priceLevel": 2,
+      "deliveryFee": 6,
+      "minOrder": 30,
+      "isOpen": true,
+      "supportsDelivery": true,
+      "supportsPickup": true,
+      "address": "Downtown Dubai"
+    },
+    {
+      "id": "rst_bento",
+      "ownerId": "usr_owner_1",
+      "name": "Bento District",
+      "nameAr": "بنتو ديستريكت",
+      "description": "Fast sushi, bento boxes, ramen, and Japanese drinks.",
+      "descriptionAr": "سوشي سريع وصناديق بنتو ورامن ومشروبات يابانية.",
+      "coverImage": "https://images.unsplash.com/photo-1579584425555-c3ce17fd4351?auto=format&fit=crop&w=1400&q=80",
+      "logo": "https://images.unsplash.com/photo-1553621042-f6e147245754?auto=format&fit=crop&w=300&q=80",
+      "cuisines": ["Japanese", "Sushi", "Ramen"],
+      "rating": 4.7,
+      "reviewCount": 620,
+      "deliveryTime": "20-30 min",
+      "priceLevel": 3,
+      "deliveryFee": 5,
+      "minOrder": 35,
+      "isOpen": true,
+      "supportsDelivery": true,
+      "supportsPickup": false,
+      "address": "Business Bay, Dubai"
+    }
+  ],
+  "menuCategories": [
+    { "id": "cat_levant_mezze", "restaurantId": "rst_levant", "name": "Cold Mezze", "nameAr": "مقبلات باردة", "sortOrder": 1 },
+    { "id": "cat_levant_grill", "restaurantId": "rst_levant", "name": "Grills", "nameAr": "مشاوي", "sortOrder": 2 },
+    { "id": "cat_roma_pizza", "restaurantId": "rst_roma", "name": "Pizza", "nameAr": "بيتزا", "sortOrder": 1 },
+    { "id": "cat_bento_sushi", "restaurantId": "rst_bento", "name": "Sushi Sets", "nameAr": "مجموعات السوشي", "sortOrder": 1 }
+  ],
+  "menuItems": [
+    {
+      "id": "item_hummus",
+      "restaurantId": "rst_levant",
+      "categoryId": "cat_levant_mezze",
+      "name": "Silky Hummus",
+      "nameAr": "حمص ناعم",
+      "description": "Chickpeas, tahini, lemon, olive oil, and warm pita.",
+      "descriptionAr": "حمص وطحينة وليمون وزيت زيتون مع خبز دافئ.",
+      "price": 18,
+      "image": "https://images.unsplash.com/photo-1577906096429-f73c2c312435?auto=format&fit=crop&w=900&q=80",
+      "isAvailable": true,
+      "isVegetarian": true,
+      "calories": 310
+    },
+    {
+      "id": "item_mixed_grill",
+      "restaurantId": "rst_levant",
+      "categoryId": "cat_levant_grill",
+      "name": "Signature Mixed Grill",
+      "nameAr": "مشاوي مشكلة",
+      "description": "Lamb kofta, shish tawook, beef kebab, rice, and dips.",
+      "descriptionAr": "كفتة غنم وشيش طاووق وكباب لحم وأرز وصلصات.",
+      "price": 64,
+      "image": "https://images.unsplash.com/photo-1529692236671-f1f6cf9683ba?auto=format&fit=crop&w=900&q=80",
+      "isAvailable": true,
+      "isVegetarian": false,
+      "calories": 820
+    },
+    {
+      "id": "item_margherita",
+      "restaurantId": "rst_roma",
+      "categoryId": "cat_roma_pizza",
+      "name": "Margherita DOP",
+      "nameAr": "مارغريتا",
+      "description": "San Marzano tomato, buffalo mozzarella, basil, olive oil.",
+      "descriptionAr": "طماطم سان مارزانو وموزاريلا جاموس وريحان وزيت زيتون.",
+      "price": 44,
+      "image": "https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?auto=format&fit=crop&w=900&q=80",
+      "isAvailable": true,
+      "isVegetarian": true,
+      "calories": 690
+    },
+    {
+      "id": "item_sushi_set",
+      "restaurantId": "rst_bento",
+      "categoryId": "cat_bento_sushi",
+      "name": "Chef Sushi Set",
+      "nameAr": "مجموعة سوشي الشيف",
+      "description": "Salmon nigiri, tuna maki, shrimp tempura roll, edamame.",
+      "descriptionAr": "نيغيري سلمون وماكي تونة ورول جمبري تمبورا وإدامامي.",
+      "price": 72,
+      "image": "https://images.unsplash.com/photo-1611143669185-af224c5e3252?auto=format&fit=crop&w=900&q=80",
+      "isAvailable": true,
+      "isVegetarian": false,
+      "calories": 640
+    }
+  ],
+  "orders": [
+    {
+      "id": "ord_1001",
+      "customerId": "usr_customer_1",
+      "restaurantId": "rst_levant",
+      "status": "out_for_delivery",
+      "fulfillmentType": "delivery",
+      "paymentStatus": "paid",
+      "paymentMethod": "card",
+      "subtotal": 82,
+      "deliveryFee": 4.5,
+      "tax": 4.33,
+      "total": 90.83,
+      "createdAt": "2026-05-14T09:30:00.000Z",
+      "items": [
+        { "menuItemId": "item_hummus", "name": "Silky Hummus", "quantity": 1, "unitPrice": 18 },
+        { "menuItemId": "item_mixed_grill", "name": "Signature Mixed Grill", "quantity": 1, "unitPrice": 64 }
+      ],
+      "timeline": ["placed", "accepted", "preparing", "ready_for_pickup", "partner_assigned", "out_for_delivery"]
+    }
+  ],
+  "deliveryPartners": [
+    {
+      "id": "dp_1",
+      "userId": "usr_delivery_1",
+      "name": "Ravi Menon",
+      "status": "on_delivery",
+      "vehicleType": "bike",
+      "assignedOrderIds": ["ord_1001"],
+      "rating": 4.9
+    }
+  ],
+  "reviews": [
+    { "id": "rev_1", "restaurantId": "rst_levant", "customerId": "usr_customer_1", "rating": 5, "comment": "Excellent grill and careful packing." }
+  ],
+  "payments": [
+    { "id": "pay_1", "orderId": "ord_1001", "provider": "stripe", "status": "succeeded", "amount": 90.83, "currency": "AED" }
+  ],
+  "notifications": [
+    { "id": "ntf_1", "userId": "usr_customer_1", "title": "Order update", "body": "Your order is out for delivery.", "read": false }
+  ]
+}
