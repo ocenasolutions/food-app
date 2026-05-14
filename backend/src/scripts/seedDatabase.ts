@@ -145,6 +145,31 @@ const menuSeeds = [
   ["green", "Drinks", "مشروبات", [
     ["Mango Protein Smoothie", "سموذي مانجو", "Mango, banana, whey protein, yogurt, and chia.", 28, true, 330, "https://images.unsplash.com/photo-1553530666-ba11a7da3888?auto=format&fit=crop&w=900&q=80"],
     ["Cold Press Green Juice", "عصير أخضر", "Kale, cucumber, apple, celery, lemon, and ginger.", 22, true, 140, "https://images.unsplash.com/photo-1613478223719-2ab802602423?auto=format&fit=crop&w=900&q=80"]
+  ]],
+  ["levant", "Wraps & Sides", "لفائف وجوانب", [
+    ["Beef Kofta Wrap", "لفائف كفتة", "Charcoal kofta, parsley onion salad, pickles, and tahini.", 32, false, 560, "https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?auto=format&fit=crop&w=900&q=80"],
+    ["Za'atar Fries", "بطاطا زعتر", "Crispy fries tossed with za'atar, sumac, and garlic dip.", 21, true, 430, "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=900&q=80"],
+    ["Lentil Soup", "شوربة عدس", "Slow-cooked red lentils, cumin, lemon, and crispy pita.", 19, true, 260, "https://images.unsplash.com/photo-1547592166-23ac45744acd?auto=format&fit=crop&w=900&q=80"]
+  ]],
+  ["roma", "Desserts & Sides", "حلويات وجوانب", [
+    ["Classic Tiramisu", "تيراميسو", "Mascarpone cream, espresso-soaked ladyfingers, and cocoa.", 32, true, 420, "https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?auto=format&fit=crop&w=900&q=80"],
+    ["Burrata Caprese", "بوراتا كابريزي", "Creamy burrata, heirloom tomato, basil, and aged balsamic.", 47, true, 510, "https://images.unsplash.com/photo-1505253716362-afaea1d3d1af?auto=format&fit=crop&w=900&q=80"],
+    ["Arancini Bites", "أرانشيني", "Crispy risotto balls filled with mozzarella and tomato sauce.", 34, true, 540, "https://images.unsplash.com/photo-1625944525533-473f1a3d54e7?auto=format&fit=crop&w=900&q=80"]
+  ]],
+  ["bento", "Bento Boxes", "صناديق بنتو", [
+    ["Teriyaki Chicken Bento", "بنتو دجاج ترياكي", "Teriyaki chicken, steamed rice, gyoza, salad, and pickles.", 58, false, 760, "https://images.unsplash.com/photo-1569058242253-92a9c755a0ec?auto=format&fit=crop&w=900&q=80"],
+    ["Salmon Donburi", "دونبوري سلمون", "Seared salmon, sushi rice, avocado, edamame, and spicy mayo.", 66, false, 690, "https://images.unsplash.com/photo-1617196034796-73dfa7b1fd56?auto=format&fit=crop&w=900&q=80"],
+    ["Crispy Gyoza", "جيوزا مقرمشة", "Pan-seared chicken dumplings with ponzu dipping sauce.", 31, false, 410, "https://images.unsplash.com/photo-1625398407796-82650a8c135f?auto=format&fit=crop&w=900&q=80"]
+  ]],
+  ["tandoor", "Tandoor Specials", "أطباق التنور", [
+    ["Tandoori Prawns", "روبيان تندوري", "Charred prawns marinated with yogurt, chili, and lime.", 69, false, 520, "https://images.unsplash.com/photo-1565680018434-b513d5e5fd47?auto=format&fit=crop&w=900&q=80"],
+    ["Seekh Kebab Platter", "طبق كباب سيخ", "Spiced lamb kebabs with mint chutney, onions, and naan.", 54, false, 710, "https://images.unsplash.com/photo-1603360946369-dc9bb6258143?auto=format&fit=crop&w=900&q=80"],
+    ["Masala Chai", "شاي ماسالا", "Slow-brewed black tea with milk, ginger, cardamom, and cloves.", 14, true, 130, "https://images.unsplash.com/photo-1571934811356-5cc061b6821f?auto=format&fit=crop&w=900&q=80"]
+  ]],
+  ["green", "Breakfast & Snacks", "فطور ووجبات خفيفة", [
+    ["Avocado Toast", "توست أفوكادو", "Sourdough, smashed avocado, poached egg, chili, and lime.", 34, true, 430, "https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=900&q=80"],
+    ["Greek Yogurt Parfait", "بارفيه زبادي يوناني", "Greek yogurt, berries, granola, honey, and pistachio.", 27, true, 310, "https://images.unsplash.com/photo-1488477181946-6428a0291777?auto=format&fit=crop&w=900&q=80"],
+    ["Protein Energy Bites", "كرات بروتين", "Dates, oats, almond butter, cocoa, and chia seeds.", 24, true, 280, "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=900&q=80"]
   ]]
 ] as const;
 

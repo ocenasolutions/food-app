@@ -87,3 +87,14 @@ export async function placeOrder(payload: unknown) {
     }
   );
 }
+
+export async function updateOrderStatus(id: string, status: string) {
+  return api<Order>(
+    `/orders/${id}/status`,
+    {
+      method: "PATCH",
+      body: JSON.stringify({ status }),
+      cache: "no-store"
+    }
+  );
+}

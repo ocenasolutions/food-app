@@ -1,9 +1,9 @@
 "use client";
 
-import { CreditCard, Minus, Plus, ReceiptText, Truck } from "lucide-react";
+import { CheckCircle2, CreditCard, Minus, Plus, ReceiptText, Truck, WalletCards } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { placeOrder } from "@/lib/api";
+import { placeOrder, updateOrderStatus } from "@/lib/api";
 import { readSession } from "@/lib/auth-client";
 import type { MenuItem } from "@/lib/types";
 import { formatMoney } from "@/lib/utils";
@@ -17,9 +17,10 @@ export function CartPanel({ lines, onAdd, onRemove, restaurantId }: {
   restaurantId: string;
 }) {
   const [fulfillmentType, setFulfillmentType] = useState<"delivery" | "pickup">("delivery");
-  const [paymentMethod, setPaymentMethod] = useState<"card" | "cash">("card");
+  const [paymentMethod, setPaymentMethod] = useState<"card" | "cash" | "wallet">("card");
   const [status, setStatus] = useState("");
   const [error, setError] = useState("");
+  const [processing, setProcessing] = useState(false);
   const subtotal = useMemo(() => lines.reduce((sum, item) => sum + item.price * item.quantity, 0), [lines]);
   const deliveryFee = fulfillmentType === "delivery" ? 5 : 0;
   const tax = subtotal * 0.05;
@@ -32,14 +33,17 @@ export function CartPanel({ lines, onAdd, onRemove, restaurantId }: {
   async function checkout() {
     setStatus("");
     setError("");
+    setProcessing(true);
     const user = readSession();
     const customerId = user?.id ?? user?._id;
     if (!customerId) {
       setError("Please log in before placing an order.");
+      setProcessing(false);
       return;
     }
 
     try {
+      await new Promise((resolve) => window.setTimeout(resolve, 650));
       const result = await placeOrder({
         customerId,
         restaurantId,
@@ -52,9 +56,13 @@ export function CartPanel({ lines, onAdd, onRemove, restaurantId }: {
           unitPrice: line.price
         }))
       });
-      setStatus(`Order ${result.data.id ?? result.data._id} placed.`);
+      const orderId = result.data.id ?? result.data._id;
+      if (orderId) await updateOrderStatus(orderId, "accepted");
+      setStatus(`Payment of ${formatMoney(total)} completed. Your order has been accepted.`);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Order failed.");
+    } finally {
+      setProcessing(false);
     }
   }
 
@@ -106,19 +114,28 @@ export function CartPanel({ lines, onAdd, onRemove, restaurantId }: {
         <div className="flex justify-between"><span>Tax</span><span>{formatMoney(tax)}</span></div>
         <div className="flex justify-between border-t border-border pt-3 text-base font-bold"><span>Total</span><span>{formatMoney(total)}</span></div>
       </div>
-      <div className="mt-4 grid grid-cols-2 gap-2">
+      <div className="mt-4 grid grid-cols-3 gap-2">
         <Button variant={paymentMethod === "card" ? "secondary" : "outline"} onClick={() => setPaymentMethod("card")}>
           <CreditCard size={16} />
           Card
+        </Button>
+        <Button variant={paymentMethod === "wallet" ? "secondary" : "outline"} onClick={() => setPaymentMethod("wallet")}>
+          <WalletCards size={16} />
+          Wallet
         </Button>
         <Button variant={paymentMethod === "cash" ? "secondary" : "outline"} onClick={() => setPaymentMethod("cash")}>
           Cash
         </Button>
       </div>
-      <Button className="mt-4 w-full" disabled={!lines.length} onClick={checkout}>
-        Place order
+      <Button className="mt-4 w-full" disabled={!lines.length || processing} onClick={checkout}>
+        {processing ? "Processing..." : paymentMethod === "cash" ? `Confirm ${formatMoney(total)}` : `Pay mocked ${formatMoney(total)}`}
       </Button>
-      {status ? <p className="mt-3 rounded-md bg-muted p-3 text-sm">{status}</p> : null}
+      {status ? (
+        <p className="mt-3 flex items-start gap-2 rounded-md bg-accent/10 p-3 text-sm font-semibold text-accent">
+          <CheckCircle2 className="mt-0.5 shrink-0" size={17} />
+          {status}
+        </p>
+      ) : null}
       {error ? <p className="mt-3 rounded-md bg-primary/10 p-3 text-sm font-semibold text-primary">{error}</p> : null}
     </aside>
   );
