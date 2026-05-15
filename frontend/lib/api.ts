@@ -1,16 +1,36 @@
 import type { MenuCategory, MenuItem, Order, Restaurant, UserRole } from "./types";
 
-const API_URL = "https://food-app-ituc.onrender.com/api";
+ const API_URL = "https://food-app-ituc.onrender.com/api";
+//const API_URL= "http://localhost:4000/api"
 
 type ApiResult<T> = { data: T; source: "database" | "mock" };
 
+function getAuthToken(): string | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const session = window.localStorage.getItem("foodflow.session");
+    if (!session) return null;
+    const parsed = JSON.parse(session);
+    return parsed.token || null;
+  } catch {
+    return null;
+  }
+}
+
 async function api<T>(path: string, init?: RequestInit): Promise<ApiResult<T>> {
+  const token = getAuthToken();
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+    ...(init?.headers as Record<string, string>)
+  };
+  
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
+  }
+
   const response = await fetch(`${API_URL}${path}`, {
     ...init,
-    headers: {
-      "Content-Type": "application/json",
-      ...init?.headers
-    },
+    headers,
     next: init?.cache === "no-store" ? undefined : { revalidate: 30 }
   });
 

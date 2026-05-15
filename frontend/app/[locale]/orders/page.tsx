@@ -1,13 +1,47 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import { CheckCircle2 } from "lucide-react";
 import { getOrders } from "@/lib/api";
 import { formatMoney } from "@/lib/utils";
-
-export const dynamic = "force-dynamic";
+import type { Order } from "@/lib/types";
 
 const flow = ["placed", "accepted", "preparing", "ready_for_pickup", "partner_assigned", "out_for_delivery", "delivered"];
 
-export default async function OrdersPage() {
-  const { data: orders } = await getOrders();
+export default function OrdersPage() {
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    getOrders()
+      .then(({ data }) => {
+        setOrders(data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        setError(err.message || "Failed to load orders");
+        setLoading(false);
+      });
+  }, []);
+
+  if (loading) {
+    return (
+      <main className="page-shell py-8">
+        <h1 className="text-3xl font-black">Order Tracking</h1>
+        <p className="text-muted-foreground">Loading orders...</p>
+      </main>
+    );
+  }
+
+  if (error) {
+    return (
+      <main className="page-shell py-8">
+        <h1 className="text-3xl font-black">Order Tracking</h1>
+        <p className="text-red-600">Error: {error}</p>
+      </main>
+    );
+  }
 
   return (
     <main className="page-shell py-8">

@@ -1,15 +1,52 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import { Banknote, Bike, Store, UsersRound } from "lucide-react";
 import { getAdminStats, getOrders, getRestaurants } from "@/lib/api";
 import { formatMoney } from "@/lib/utils";
+import type { Order, Restaurant } from "@/lib/types";
 
-export const dynamic = "force-dynamic";
+export default function AdminPage() {
+  const [stats, setStats] = useState<{ users: number; restaurants: number; orders: number; revenue: number; deliveryPartners: number } | null>(null);
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-export default async function AdminPage() {
-  const [{ data: stats }, { data: orders }, { data: restaurants }] = await Promise.all([
-    getAdminStats(),
-    getOrders(),
-    getRestaurants()
-  ]);
+  useEffect(() => {
+    Promise.all([getAdminStats(), getOrders(), getRestaurants()])
+      .then(([statsRes, ordersRes, restaurantsRes]) => {
+        setStats(statsRes.data);
+        setOrders(ordersRes.data);
+        setRestaurants(restaurantsRes.data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        setError(err.message || "Failed to load admin data");
+        setLoading(false);
+      });
+  }, []);
+
+  if (loading) {
+    return (
+      <main className="page-shell py-8">
+        <h1 className="text-3xl font-black">Admin Dashboard</h1>
+        <p className="text-muted-foreground">Loading...</p>
+      </main>
+    );
+  }
+
+  if (error) {
+    return (
+      <main className="page-shell py-8">
+        <h1 className="text-3xl font-black">Admin Dashboard</h1>
+        <p className="text-red-600">Error: {error}</p>
+      </main>
+    );
+  }
+
+  if (!stats) return null;
+
   const cards = [
     { label: "Users", value: stats.users, icon: UsersRound },
     { label: "Restaurants", value: stats.restaurants, icon: Store },
