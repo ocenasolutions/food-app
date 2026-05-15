@@ -1,6 +1,6 @@
 import type { MenuCategory, MenuItem, Order, Restaurant, UserRole } from "./types";
 
- const API_URL = "https://food-app-ituc.onrender.com/api";
+const API_URL = "https://food-app-ituc.onrender.com/api";
 //const API_URL= "http://localhost:4000/api"
 
 type ApiResult<T> = { data: T; source: "database" | "mock" };
@@ -95,6 +95,120 @@ export function getOrders() {
 export function getAdminStats() {
   return api<{ users: number; restaurants: number; orders: number; revenue: number; deliveryPartners: number }>(
     "/dashboards/admin"
+  );
+}
+
+export function getUsers() {
+  return api<Array<{
+    id: string;
+    name: string;
+    email: string;
+    phone: string;
+    role: UserRole;
+    createdAt: string;
+  }>>(
+    "/admin/users"
+  );
+}
+
+export function getDeliveryPartners() {
+  return api<Array<{
+    id: string;
+    userId: string;
+    vehicleType: string;
+    vehicleNumber: string;
+    status: string;
+    currentLocation?: { lat: number; lng: number };
+    assignedOrderIds: string[];
+  }>>(
+    "/admin/delivery-partners"
+  );
+}
+
+export function updateRestaurantStatus(id: string, isOpen: boolean) {
+  return api<Restaurant>(
+    `/admin/restaurants/${id}/status`,
+    {
+      method: "PATCH",
+      body: JSON.stringify({ isOpen }),
+      cache: "no-store"
+    }
+  );
+}
+
+export function deleteUser(id: string) {
+  return api<{ message: string }>(
+    `/admin/users/${id}`,
+    {
+      method: "DELETE",
+      cache: "no-store"
+    }
+  );
+}
+
+export function createUser(data: { name: string; email: string; password: string; phone: string; role: string }) {
+  return api<any>(
+    "/admin/users",
+    {
+      method: "POST",
+      body: JSON.stringify(data),
+      cache: "no-store"
+    }
+  );
+}
+
+export function updateUser(id: string, data: { name: string; email: string; phone: string; role: string }) {
+  return api<any>(
+    `/admin/users/${id}`,
+    {
+      method: "PATCH",
+      body: JSON.stringify(data),
+      cache: "no-store"
+    }
+  );
+}
+
+export function createRestaurant(data: Partial<Restaurant>) {
+  return api<Restaurant>(
+    "/admin/restaurants",
+    {
+      method: "POST",
+      body: JSON.stringify(data),
+      cache: "no-store"
+    }
+  );
+}
+
+export function updateRestaurant(id: string, data: Partial<Restaurant>) {
+  return api<Restaurant>(
+    `/admin/restaurants/${id}`,
+    {
+      method: "PATCH",
+      body: JSON.stringify(data),
+      cache: "no-store"
+    }
+  );
+}
+
+export function createDeliveryPartner(data: any) {
+  return api<any>(
+    "/admin/delivery-partners",
+    {
+      method: "POST",
+      body: JSON.stringify(data),
+      cache: "no-store"
+    }
+  );
+}
+
+export function updateDeliveryPartner(id: string, data: any) {
+  return api<any>(
+    `/admin/delivery-partners/${id}`,
+    {
+      method: "PATCH",
+      body: JSON.stringify(data),
+      cache: "no-store"
+    }
   );
 }
 

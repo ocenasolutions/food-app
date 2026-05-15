@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { roleHome, writeSession } from "@/lib/auth-client";
 import { getApiHealth, loginWithApi } from "@/lib/api";
@@ -16,6 +17,7 @@ export function LoginForm({ locale }: { locale: Locale }) {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [apiOnline, setApiOnline] = useState<boolean | null>(null);
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     getApiHealth().then(setApiOnline);
@@ -25,6 +27,26 @@ export function LoginForm({ locale }: { locale: Locale }) {
     event.preventDefault();
     setLoading(true);
     setError("");
+
+    // Validate for spaces
+    if (email.includes(" ")) {
+      setError("Email cannot contain spaces");
+      setLoading(false);
+      return;
+    }
+
+    if (password.includes(" ")) {
+      setError("Password cannot contain spaces");
+      setLoading(false);
+      return;
+    }
+
+    // Validate empty fields
+    if (!email.trim() || !password.trim()) {
+      setError("Email and password are required");
+      setLoading(false);
+      return;
+    }
 
     try {
       const result = await loginWithApi({ email, password });
@@ -76,13 +98,23 @@ export function LoginForm({ locale }: { locale: Locale }) {
             className="mt-2 h-11 w-full rounded-md border border-border bg-white px-3 outline-none focus:ring-2 focus:ring-primary"
           />
           <label className="mt-4 block text-sm font-bold" htmlFor="password">Password</label>
-          <input
-            id="password"
-            type="password"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-            className="mt-2 h-11 w-full rounded-md border border-border bg-white px-3 outline-none focus:ring-2 focus:ring-primary"
-          />
+          <div className="relative">
+            <input
+              id="password"
+              type={showPassword ? "text" : "password"}
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+              className="mt-2 h-11 w-full rounded-md border border-border bg-white px-3 pr-10 outline-none focus:ring-2 focus:ring-primary"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+              aria-label={showPassword ? "Hide password" : "Show password"}
+            >
+              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+            </button>
+          </div>
           {error ? <p className="mt-3 rounded-md bg-primary/10 p-3 text-sm font-semibold text-primary">{error}</p> : null}
           <Button className="mt-5 w-full" type="submit" disabled={loading}>
             {loading ? "Checking API..." : "Enter workspace"}
